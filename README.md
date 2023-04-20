@@ -14,4 +14,12 @@ docker run --name mysql  -e MYSQL_ROOT_PASSWORD=123456  -p 3306:3306 -d mysql:5.
 ```shell
 go get -u github.com/gin-gonic/gin
 go get -u gorm.io/gorm
+go install github.com/swaggo/swag/cmd/swag
+go get github.com/swaggo/gin-swagger
+go get github.com/swaggo/files
+```
+## swagger 
+https://gitcode.net/mirrors/swaggo/gin-swagger 
+```shell
+swag init 
 ```
