@@ -2,7 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type ProblemModel struct {
+type Problem struct {
 	gorm.Model
 	Identity   string `gorm:"column:identity;type:varchar(36);" json:"identity"`
 	CategoryId string `gorm:"column:category_id;type:varchar(255);" json:"category_id "`
@@ -12,6 +12,6 @@ type ProblemModel struct {
 	MaxMem     int    `gorm:"column:max_mem;type:int(11)" json:"max_mem"`         //最大运行内存
 }
 
-func (ProblemModel) ProblemModelTableName() string {
+func (Problem) ProblemModelTableName() string {
 	return "problem"
 }

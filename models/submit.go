@@ -2,7 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type SubmitModel struct {
+type Submit struct {
 	gorm.Model
 	Identity        string `gorm:"column:identity;type:varchar(36);" json:"identity"`
 	ProblemIdentity string `gorm:"column:problem_identity;type:varchar(36);" json:"problem_identity" `
@@ -10,6 +10,6 @@ type SubmitModel struct {
 	Path            string `gorm:"column:path;type:varchar(255);" json:"path"`
 }
 
-func (SubmitModel) SubmitModelTableName() string {
+func (Submit) SubmitModelTableName() string {
 	return "submit"
 }

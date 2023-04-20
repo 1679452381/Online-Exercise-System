@@ -10,6 +10,6 @@ func Router() *gin.Engine {
 	r := gin.Default()
 	r.Use(cors.Default())
 	r.GET("/hello", service.Hello)
-
+	r.POST("/login", service.Login)
 	return r
 }
