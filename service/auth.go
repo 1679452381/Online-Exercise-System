@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"online_exercise_system/global"
 	"online_exercise_system/models"
 	"online_exercise_system/response"
@@ -56,6 +57,7 @@ func Login(c *gin.Context) {
 // @Param username formData string false "username"
 // @Param password formData string false "password"
 // @Param email formData string false "email"
+// @Param code formData string false "code"
 // @Success 200 {string} json "{"code":"200","msg":"",data:""}"
 // @Router /register [post]
 func Register(c *gin.Context) {
@@ -75,7 +77,19 @@ func Register(c *gin.Context) {
 		response.SuccessResponseWithMsg("该账号已被使用", c)
 		return
 	}
+	fmt.Println(code)
 	//	从redis中获取验证码 验证邮箱验证码
+	emailCode, err := utils.Redis.Get(context.Background(), global.EmailCode+email).Result()
+	fmt.Println(code, emailCode)
+	if err != nil {
+		log.Printf("%v", err.Error())
+		response.FailResponseWithMsgErr("服务器错误", err, c)
+		return
+	}
+	if code != emailCode {
+		response.SuccessResponseWithMsg("验证码错误", c)
+		return
+	}
 	//  创建用户
 	u := models.User{
 		Identity: utils.GetUUID(),
@@ -84,7 +98,7 @@ func Register(c *gin.Context) {
 		Email:    email,
 	}
 	fmt.Println(u)
-	err := utils.DB.Create(&u).Error
+	err = utils.DB.Create(&u).Error
 	if err != nil {
 		response.FailResponseWithMsg("系统错误", c)
 		return
@@ -118,12 +132,15 @@ func SendEmailCode(c *gin.Context) {
 		response.FailResponseWithMsg("邮箱已被注册", c)
 		return
 	}
-	fmt.Println(u)
+
+	//fmt.Println(u)
 	//生成4位数验证码
 	code := utils.GetCode()
+	fmt.Println(code)
 	//存到redis
 	err := utils.Redis.Set(context.Background(), global.EmailCode+email, code, time.Second*60).Err()
 	if err != nil {
+		log.Printf("%v", err.Error())
 		response.FailResponseWithMsgErr("服务器错误", err, c)
 		return
 	}
@@ -133,5 +150,5 @@ func SendEmailCode(c *gin.Context) {
 		response.FailResponseWithMsgErr("服务器错误", err, c)
 		return
 	}
-	response.FailResponseWithMsg("已发送验证码，请注意查收", c)
+	response.SuccessResponseWithMsg("已发送验证码，一分钟内有效，请注意查收", c)
 }

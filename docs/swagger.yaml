@@ -6,6 +6,21 @@ info:
   title: online_exercise_system
   version: "1.0"
 paths:
+  /email/code:
+    post:
+      parameters:
+      - description: email
+        in: formData
+        name: email
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","msg":""}'
+          schema:
+            type: string
+      summary: 用户注册
+      tags:
+      - 公共方法
   /hello:
     get:
       consumes:
@@ -24,9 +39,9 @@ paths:
   /login:
     post:
       parameters:
-      - description: account
+      - description: username
         in: formData
-        name: account
+        name: username
         type: string
       - description: password
         in: formData
@@ -38,6 +53,33 @@ paths:
           schema:
             type: string
       summary: 用户登录
+      tags:
+      - 公共方法
+  /register:
+    post:
+      parameters:
+      - description: username
+        in: formData
+        name: username
+        type: string
+      - description: password
+        in: formData
+        name: password
+        type: string
+      - description: email
+        in: formData
+        name: email
+        type: string
+      - description: code
+        in: formData
+        name: code
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","msg":"",data:""}'
+          schema:
+            type: string
+      summary: 用户注册
       tags:
       - 公共方法
 swagger: "2.0"
