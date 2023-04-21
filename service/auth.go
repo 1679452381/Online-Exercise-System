@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"online_exercise_system/global"
 	"online_exercise_system/models"
@@ -39,7 +40,12 @@ func Login(c *gin.Context) {
 		return
 	}
 	//将token存到redis中
-	utils.Redis.Set(context.Background(), global.Token+account, token, time.Hour*1)
+	fmt.Println("login", global.Token+account)
+	err = utils.Redis.Set(context.Background(), global.Token+account, token, time.Hour*1).Err()
+	if err != nil {
+		response.SuccessResponseWithMsg("系统错误", c)
+		return
+	}
 	//返回token
 	response.SuccessResponseWithToken(token, c)
 }
