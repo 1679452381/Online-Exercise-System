@@ -92,3 +92,46 @@ func Register(c *gin.Context) {
 	fmt.Println(u)
 	response.SuccessResponse("注册成功", u, c)
 }
+
+// SendEmailCode
+// @Tags 公共方法
+// @Summary 用户注册
+// @Param email formData string false "email"
+// @Success 200 {string} json "{"code":"200","msg":""}"
+// @Router /email/code [post]
+func SendEmailCode(c *gin.Context) {
+	//获取邮箱
+	email := c.PostForm("email")
+	if email == "" {
+		response.FailResponseWithMsg("邮箱为空", c)
+		return
+	}
+	//校验邮箱格式
+	if ok := utils.IsEmailValid(email); !ok {
+		response.FailResponseWithMsg("请输入正确的邮箱", c)
+		return
+	}
+	u := models.User{}
+	//查看邮箱是否被注册
+	count := utils.DB.Where("email = ?", email).Find(&u).RowsAffected
+	if count > 0 {
+		response.FailResponseWithMsg("邮箱已被注册", c)
+		return
+	}
+	fmt.Println(u)
+	//生成4位数验证码
+	code := utils.GetCode()
+	//存到redis
+	err := utils.Redis.Set(context.Background(), global.EmailCode+email, code, time.Second*60).Err()
+	if err != nil {
+		response.FailResponseWithMsgErr("服务器错误", err, c)
+		return
+	}
+	//发送验证码
+	err = utils.SendEmailCode(email, code)
+	if err != nil {
+		response.FailResponseWithMsgErr("服务器错误", err, c)
+		return
+	}
+	response.FailResponseWithMsg("已发送验证码，请注意查收", c)
+}

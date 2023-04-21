@@ -22,6 +22,7 @@ go get github.com/gin-contrib/cors
 go get github.com/redis/go-redis/v9
 go get -u github.com/golang-jwt/jwt/v5
 go get github.com/google/uuid
+go get github.com/jordan-wright/email 
 
 # gin直接连接mysql
 go get -u github.com/go-sql-driver/mysql

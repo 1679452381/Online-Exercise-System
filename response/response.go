@@ -39,3 +39,11 @@ func FailResponseWithMsg(msg string, c *gin.Context) {
 		"code": -1,
 	})
 }
+
+func FailResponseWithMsgErr(msg string, err error, c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"msg":  msg,
+		"code": 500,
+		"err":  err.Error(),
+	})
+}
