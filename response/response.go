@@ -19,6 +19,13 @@ func SuccessResponseWithData(data interface{}, c *gin.Context) {
 		"data": data,
 	})
 }
+func SuccessResponse(msg string, data interface{}, c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"msg":  msg,
+		"code": 200,
+		"data": data,
+	})
+}
 func SuccessResponseWithToken(data interface{}, c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"msg":   "登陆成功",

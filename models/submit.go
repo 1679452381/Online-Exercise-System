@@ -10,6 +10,6 @@ type Submit struct {
 	Path            string `gorm:"column:path;type:varchar(255);" json:"path"`
 }
 
-func (Submit) SubmitModelTableName() string {
+func (Submit) TableName() string {
 	return "submit"
 }

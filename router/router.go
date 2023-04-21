@@ -12,6 +12,7 @@ func Router() *gin.Engine {
 	r.Use(cors.Default())
 	r.GET("/hello", service.Hello)
 	r.POST("/login", service.Login)
+	r.POST("/register", service.Register)
 	//用户组
 	auth := r.Group("/u", middleware.AuthCheck())
 	auth.POST("/test", service.Hello)

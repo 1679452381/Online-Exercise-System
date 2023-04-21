@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"time"
 )
 
@@ -48,4 +49,9 @@ func AnalyToken(tokenString string) (*UserClaim, error) {
 	} else {
 		return nil, err
 	}
+}
+
+// 获取uuid
+func GetUUID() string {
+	return fmt.Sprintf("%x", uuid.New())
 }

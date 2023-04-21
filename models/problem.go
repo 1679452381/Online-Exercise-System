@@ -12,6 +12,6 @@ type Problem struct {
 	MaxMem     int    `gorm:"column:max_mem;type:int(11)" json:"max_mem"`         //最大运行内存
 }
 
-func (Problem) ProblemModelTableName() string {
+func (Problem) TableName() string {
 	return "problem"
 }

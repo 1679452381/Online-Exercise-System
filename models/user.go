@@ -6,13 +6,13 @@ import (
 
 type User struct {
 	gorm.Model
-	Identity string `gorm:"column:identity;type:varchar(36);" json:"identity"`
-	Name     string `gorm:"column:identity;type:varchar(100);" json:"name"`
-	Phone    string `gorm:"column:category_id;type:varchar(20);" json:"phone" `
-	Password string `gorm:"column:title;type:varchar(100);" json:"_"`
-	Email    string `gorm:"column:content;type:varchar(100);"  json:"email"`
+	Identity string `gorm:"column:identity;type:varchar(100);" json:"identity"`
+	UserName string `gorm:"column:username;type:varchar(100);" json:"user_name"`
+	Phone    string `gorm:"column:phone;type:varchar(20);" json:"phone" `
+	Password string `gorm:"column:password;type:varchar(100);" json:"_"`
+	Email    string `gorm:"column:email;type:varchar(100);"  json:"email"`
 }
 
-func (User) UserModelTableName() string {
-	return "user"
+func (User) TableName() string {
+	return "users"
 }

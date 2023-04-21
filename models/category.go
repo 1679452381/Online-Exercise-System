@@ -9,6 +9,6 @@ type Category struct {
 	ParentId int    `gorm:"column:category_id;type:int(11);" json:"parent_id" `
 }
 
-func (Category) CategoryModelTableName() string {
+func (Category) TableName() string {
 	return "category"
 }
