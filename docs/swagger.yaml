@@ -124,4 +124,14 @@ paths:
       summary: 用户注册
       tags:
       - 公共方法
+  /u/detail:
+    get:
+      responses:
+        "200":
+          description: '{"code":"200","msg":"",data:""}'
+          schema:
+            type: string
+      summary: 用户信息详情
+      tags:
+      - 用户组
 swagger: "2.0"

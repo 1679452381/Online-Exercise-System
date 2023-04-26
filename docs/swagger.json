@@ -193,6 +193,22 @@
                     }
                 }
             }
+        },
+        "/u/detail": {
+            "get": {
+                "tags": [
+                    "用户组"
+                ],
+                "summary": "用户信息详情",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"msg\":\"\",data:\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     }
 }

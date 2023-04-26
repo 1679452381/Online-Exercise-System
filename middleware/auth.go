@@ -1,9 +1,7 @@
 package middleware
 
 import (
-	"context"
 	"github.com/gin-gonic/gin"
-	"online_exercise_system/global"
 	"online_exercise_system/response"
 	"online_exercise_system/utils"
 )
@@ -21,17 +19,17 @@ func AuthCheck() gin.HandlerFunc {
 			return
 		}
 		//从redis获取token
-		rToken, err := utils.Redis.Get(context.Background(), global.Token+uc.Identity).Result()
-		if err != nil {
-			c.Abort()
-			response.FailResponseWithMsg("登陆超时，请重新登录", c)
-			return
-		}
-		if token != rToken {
-			c.Abort()
-			response.FailResponseWithMsg("登陆超时，请重新登录", c)
-			return
-		}
+		//rToken, err := utils.Redis.Get(context.Background(), global.Token+uc.Identity).Result()
+		//if err != nil {
+		//	c.Abort()
+		//	response.FailResponseWithMsg("登陆超时，请重新登录", c)
+		//	return
+		//}
+		//if token != rToken {
+		//	c.Abort()
+		//	response.FailResponseWithMsg("登陆超时，请重新登录", c)
+		//	return
+		//}
 		c.Set("user_claim", uc)
 		c.Next()
 	}

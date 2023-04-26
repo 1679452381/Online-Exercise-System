@@ -21,6 +21,8 @@ func Router() *gin.Engine {
 
 	//用户组
 	auth := r.Group("/u", middleware.AuthCheck())
+	auth.GET("/detail", service.UserDetail)
+
 	auth.POST("/test", service.Hello)
 
 	return r

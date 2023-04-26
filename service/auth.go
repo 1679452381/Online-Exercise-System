@@ -142,14 +142,38 @@ func SendEmailCode(c *gin.Context) {
 	err := utils.Redis.Set(context.Background(), global.EmailCode+email, code, time.Second*60).Err()
 	if err != nil {
 		log.Printf("%v", err.Error())
-		response.FailResponseWithMsgErr("服务器错误", err, c)
-		return
-	}
-	//发送验证码
-	err = utils.SendEmailCode(email, code)
-	if err != nil {
-		response.FailResponseWithMsgErr("服务器错误", err, c)
+		err = utils.SendEmailCode(email, code)
+		if err != nil {
+			response.FailResponseWithMsgErr("服务器错误", err, c)
+			response.FailResponseWithMsgErr("服务器错误", err, c)
+			return
+		}
+		//发送验证码
 		return
 	}
 	response.SuccessResponseWithMsg("已发送验证码，一分钟内有效，请注意查收", c)
+}
+
+// UserDetail
+// @Tags 用户组
+// @Summary 用户信息详情
+// @Success 200 {string} json "{"code":"200","msg":"",data:""}"
+// @Router /u/detail [get]
+func UserDetail(c *gin.Context) {
+	//在auth中间件中 保存了用户认证信息 user_claim
+	u, _ := c.Get("user_claim")
+	//断言
+	uc := u.(*utils.UserClaim)
+
+	//	查数据库
+	userDetail := &models.UserBasic{}
+	tx := models.GetUserBasicDetail(uc.Identity)
+	err := tx.Find(&userDetail).Error
+	if err != nil {
+		response.FailResponseWithMsg("服务器错误", c)
+		return
+	}
+	//	返回结果
+	//fmt.Println(problems)
+	response.SuccessResponseWithData(gin.H{"data": userDetail}, c)
 }
