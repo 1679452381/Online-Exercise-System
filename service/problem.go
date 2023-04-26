@@ -58,8 +58,11 @@ func ProblemList(c *gin.Context) {
 // @Router /problem/detail [get]
 func ProblemDetail(c *gin.Context) {
 
-	problemIdentity := c.DefaultQuery("problem_identity", "")
-
+	problemIdentity := c.Query("problem_identity")
+	if problemIdentity == "" {
+		response.FailResponseWithMsg("参数不能为空", c)
+		return
+	}
 	//	查数据库
 	problemDetail := &models.ProblemBasic{}
 	tx := models.GetProblemDetail(problemIdentity)

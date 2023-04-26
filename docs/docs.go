@@ -201,6 +201,54 @@ const docTemplate = `{
                 }
             }
         },
+        "/submit/list": {
+            "get": {
+                "tags": [
+                    "公共方法"
+                ],
+                "summary": "提交列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "size",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "problem_identity",
+                        "name": "problem_identity",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "user_identity",
+                        "name": "user_identity",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "status",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"msg\":\"\",data:\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/u/detail": {
             "get": {
                 "tags": [
