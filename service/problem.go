@@ -37,9 +37,9 @@ func ProblemList(c *gin.Context) {
 	//	查数据库
 	//count 记录数据的条数
 	var count int64
-	problems := make([]*models.Problem, 0)
+	problems := make([]*models.ProblemBasic, 0)
 	tx := models.GetProblemList(keyword)
-	err = tx.Count(&count).Offset(offset).Limit(size).Find(&problems).Error
+	err = tx.Count(&count).Omit("content").Offset(offset).Limit(size).Find(&problems).Error
 	if err != nil {
 		response.FailResponseWithMsg("服务器错误", c)
 		return
