@@ -29,3 +29,10 @@ func GetProblemList(keyword, categoryIdentity string) *gorm.DB {
 	}
 	return tx
 }
+
+func GetProblemDetail(Identity string) *gorm.DB {
+	// Preload 预加载
+	tx := utils.DB.Model(&ProblemBasic{}).Preload("ProblemCategories").Preload("ProblemCategories.CategoryBasic").
+		Where("identity=? ", Identity)
+	return tx
+}

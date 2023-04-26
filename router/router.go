@@ -16,6 +16,8 @@ func Router() *gin.Engine {
 	r.POST("/register", service.Register)
 	problem := r.Group("/problem")
 	problem.GET("/list", service.ProblemList)
+	//问题详情
+	problem.GET("/detail", service.ProblemDetail)
 
 	//用户组
 	auth := r.Group("/u", middleware.AuthCheck())

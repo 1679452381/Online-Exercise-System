@@ -32,10 +32,6 @@ func ProblemList(c *gin.Context) {
 		return
 	}
 	categoryIdentity := c.DefaultQuery("category_identity", "")
-	if err != nil {
-		response.FailResponseWithMsg("服务器错误", c)
-		return
-	}
 
 	keyword := c.Query("keyword")
 	offset := (page - 1) * size
@@ -52,4 +48,27 @@ func ProblemList(c *gin.Context) {
 	//	返回结果
 	//fmt.Println(problems)
 	response.SuccessResponseWithData(gin.H{"list": problems, "count": count}, c)
+}
+
+// ProblemDetail
+// @Tags 公共方法
+// @Summary 问题详情
+// @Param problem_identity query string false "problem_identity"
+// @Success 200 {string} json "{"code":"200","msg":"",data:""}"
+// @Router /problem/detail [get]
+func ProblemDetail(c *gin.Context) {
+
+	problemIdentity := c.DefaultQuery("problem_identity", "")
+
+	//	查数据库
+	problemDetail := &models.ProblemBasic{}
+	tx := models.GetProblemDetail(problemIdentity)
+	err := tx.Find(&problemDetail).Error
+	if err != nil {
+		response.FailResponseWithMsg("服务器错误", c)
+		return
+	}
+	//	返回结果
+	//fmt.Println(problems)
+	response.SuccessResponseWithData(gin.H{"list": problemDetail}, c)
 }

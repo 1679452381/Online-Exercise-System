@@ -55,6 +55,21 @@ paths:
       summary: 用户登录
       tags:
       - 公共方法
+  /problem/detail:
+    get:
+      parameters:
+      - description: problem_identity
+        in: query
+        name: problem_identity
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","msg":"",data:""}'
+          schema:
+            type: string
+      summary: 问题详情
+      tags:
+      - 公共方法
   /problem/list:
     get:
       parameters:
