@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"online_exercise_system/global"
 	"online_exercise_system/models"
@@ -15,6 +14,7 @@ import (
 // @Param page query string false "page"
 // @Param size query string false "size"
 // @Param keyword query  string false "keyword"
+// @Param category_identity query  string false "category_identity"
 // @Success 200 {string} json "{"code":"200","msg":"",data:""}"
 // @Router /problem/list [get]
 func ProblemList(c *gin.Context) {
@@ -31,6 +31,11 @@ func ProblemList(c *gin.Context) {
 		response.FailResponseWithMsg("服务器错误", c)
 		return
 	}
+	categoryIdentity := c.DefaultQuery("category_identity", "")
+	if err != nil {
+		response.FailResponseWithMsg("服务器错误", c)
+		return
+	}
 
 	keyword := c.Query("keyword")
 	offset := (page - 1) * size
@@ -38,13 +43,13 @@ func ProblemList(c *gin.Context) {
 	//count 记录数据的条数
 	var count int64
 	problems := make([]*models.ProblemBasic, 0)
-	tx := models.GetProblemList(keyword)
+	tx := models.GetProblemList(keyword, categoryIdentity)
 	err = tx.Count(&count).Omit("content").Offset(offset).Limit(size).Find(&problems).Error
 	if err != nil {
 		response.FailResponseWithMsg("服务器错误", c)
 		return
 	}
 	//	返回结果
-	fmt.Println(problems)
+	//fmt.Println(problems)
 	response.SuccessResponseWithData(gin.H{"list": problems, "count": count}, c)
 }

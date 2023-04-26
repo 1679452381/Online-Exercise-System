@@ -28,9 +28,10 @@ func Login(c *gin.Context) {
 		return
 	}
 	//将密码进行md5加密并与数据库对比
-	user := new(models.User)
+	user := new(models.UserBasic)
 	err := utils.DB.Where("username=? AND password = ?", username, utils.GetMd5(password)).First(&user).Error
 	if err != nil {
+		log.Fatalln(err)
 		response.SuccessResponseWithMsg("用户名或密码错误", c)
 		return
 	}
@@ -71,7 +72,7 @@ func Register(c *gin.Context) {
 		return
 	}
 	//  检测账号是否被注册
-	user := &models.User{}
+	user := &models.UserBasic{}
 	count := utils.DB.Where("username = ?", username).Find(user).RowsAffected
 	if count > 0 {
 		response.SuccessResponseWithMsg("该账号已被使用", c)
@@ -91,7 +92,7 @@ func Register(c *gin.Context) {
 		return
 	}
 	//  创建用户
-	u := models.User{
+	u := models.UserBasic{
 		Identity: utils.GetUUID(),
 		UserName: username,
 		Password: utils.GetMd5(password),
@@ -125,7 +126,7 @@ func SendEmailCode(c *gin.Context) {
 		response.FailResponseWithMsg("请输入正确的邮箱", c)
 		return
 	}
-	u := models.User{}
+	u := models.UserBasic{}
 	//查看邮箱是否被注册
 	count := utils.DB.Where("email = ?", email).Find(&u).RowsAffected
 	if count > 0 {
