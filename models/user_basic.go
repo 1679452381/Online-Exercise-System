@@ -7,11 +7,13 @@ import (
 
 type UserBasic struct {
 	gorm.Model
-	Identity string `gorm:"column:identity;type:varchar(100);" json:"identity"`
-	UserName string `gorm:"column:username;type:varchar(100);" json:"user_name"`
-	Phone    string `gorm:"column:phone;type:varchar(20);" json:"phone" `
-	Password string `gorm:"column:password;type:varchar(100);"json:"-"`
-	Email    string `gorm:"column:email;type:varchar(100);"  json:"email"`
+	Identity            string `gorm:"column:identity;type:varchar(100);" json:"identity"`
+	UserName            string `gorm:"column:username;type:varchar(100);" json:"user_name"`
+	Phone               string `gorm:"column:phone;type:varchar(20);" json:"phone" `
+	Password            string `gorm:"column:password;type:varchar(100);"json:"-"`
+	Email               string `gorm:"column:email;type:varchar(100);"  json:"email"`
+	CompletedProblemNum int    `gorm:"column:completed_problem_num;type:int(11);"  json:"completed_problem_num"`
+	SubmitNum           int    `gorm:"column:submit_num;type:int(11);"  json:"submit_num"`
 }
 
 func (UserBasic) TableName() string {
@@ -21,4 +23,8 @@ func (UserBasic) TableName() string {
 func GetUserBasicDetail(userIdentity string) *gorm.DB {
 	return utils.DB.Model(&UserBasic{}).
 		Where("identity=? ", userIdentity)
+}
+
+func GetUserBasicRankList() *gorm.DB {
+	return utils.DB.Model(&UserBasic{})
 }

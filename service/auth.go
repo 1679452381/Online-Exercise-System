@@ -9,6 +9,7 @@ import (
 	"online_exercise_system/models"
 	"online_exercise_system/response"
 	"online_exercise_system/utils"
+	"strconv"
 	"time"
 )
 
@@ -152,6 +153,43 @@ func SendEmailCode(c *gin.Context) {
 		return
 	}
 	response.SuccessResponseWithMsg("已发送验证码，一分钟内有效，请注意查收", c)
+}
+
+// GetRankList
+// @Tags 公共方法
+// @Summary 用户排行
+// @Param page query string false "page"
+// @Param size query string false "size"
+// @Success 200 {string} json "{"code":"200","msg":""}"
+// @Router /rank_list [get]
+func GetRankList(c *gin.Context) {
+	page, err := strconv.Atoi(c.DefaultQuery("page", global.DefaultPage))
+	if err != nil {
+		response.FailResponseWithMsg("服务器错误", c)
+		return
+	}
+
+	size, err := strconv.Atoi(c.DefaultQuery("size", global.DefaultSize))
+	if err != nil {
+
+		response.FailResponseWithMsg("服务器错误", c)
+		return
+	}
+	offset := (page - 1) * size
+	users := make([]*models.UserBasic, 0)
+	//	记录数据条数
+	var count int64
+	tx := models.GetUserBasicRankList()
+	err = tx.Count(&count).Order("completed_problem_num desc ,submit_num asc").Offset(offset).Limit(size).Find(&users).Error
+	if err != nil {
+		response.FailResponseWithMsg("服务器错误", c)
+		return
+	}
+	response.SuccessResponseWithToken(gin.H{
+		"data":  users,
+		"count": count,
+	}, c)
+
 }
 
 // UserDetail

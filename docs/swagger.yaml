@@ -97,6 +97,25 @@ paths:
       summary: 问题列表
       tags:
       - 公共方法
+  /rank_list:
+    get:
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: string
+      - description: size
+        in: query
+        name: size
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","msg":""}'
+          schema:
+            type: string
+      summary: 用户排行
+      tags:
+      - 公共方法
   /register:
     post:
       parameters:
