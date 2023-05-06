@@ -10,12 +10,12 @@ import (
 func AuthCheck() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		//	获取token
-		token := c.GetHeader("token")
+		token := c.GetHeader("authorization")
 		//	解析token
 		uc, err := utils.AnalyToken(token)
 		if err != nil {
 			c.Abort()
-			response.FailResponseWithMsg("用户认证失败", c)
+			response.FailResponseUnauthorizedWithMsg("用户认证失败", c)
 			return
 		}
 		//从redis获取token
@@ -31,6 +31,20 @@ func AuthCheck() gin.HandlerFunc {
 		//	return
 		//}
 		c.Set("user_claim", uc)
+		c.Next()
+	}
+}
+
+// 管理员登录验证
+func AuthAdminCheck() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		u, _ := c.Get("user_claim")
+		uc := u.(*utils.UserClaim)
+		if uc.IsAdmin != 1 {
+			c.Abort()
+			response.FailResponseUnauthorizedWithMsg("非管理员用户", c)
+			return
+		}
 		c.Next()
 	}
 }

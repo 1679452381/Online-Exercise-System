@@ -39,6 +39,12 @@ func FailResponseWithMsg(msg string, c *gin.Context) {
 		"code": -1,
 	})
 }
+func FailResponseUnauthorizedWithMsg(msg string, c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"msg":  msg,
+		"code": http.StatusUnauthorized,
+	})
+}
 
 func FailResponseWithMsgErr(msg string, err error, c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{

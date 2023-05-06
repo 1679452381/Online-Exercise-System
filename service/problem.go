@@ -1,10 +1,13 @@
 package service
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"online_exercise_system/global"
 	"online_exercise_system/models"
 	"online_exercise_system/response"
+	"online_exercise_system/utils"
 	"strconv"
 )
 
@@ -74,4 +77,90 @@ func ProblemDetail(c *gin.Context) {
 	//	返回结果
 	//fmt.Println(problems)
 	response.SuccessResponseWithData(gin.H{"list": problemDetail}, c)
+}
+
+// CreateProblem
+// @Tags 管理员私有方法
+// @Summary 创建问题
+// @Param authorization header string true "authorization"
+// @Param title formData string true "title"
+// @Param content formData string true "content"
+// @Param max_runtime formData int false "max_runtime"
+// @Param max_mem formData int false "max_mem"
+// @Param category_ids formData array false "category_ids"
+// @Param test_cases formData array true "test_cases"
+// @Success 200 {string} json "{"code":"200","msg":"",data:""}"
+// @Router /problem/add [post]
+func CreateProblem(c *gin.Context) {
+	//获取参数
+	title := c.PostForm("title")
+	content := c.PostForm("content")
+	maxRuntime, _ := strconv.Atoi(c.PostForm("max_runtime"))
+	maxMem, _ := strconv.Atoi(c.PostForm("max_mem"))
+	categoryIds := c.PostFormArray("category_ids")
+	testCases := c.PostFormArray("test_cases")
+	if title == "" || content == "" || len(testCases) == 0 {
+		response.FailResponseWithMsg("参数不能为空", c)
+		return
+	}
+	//	创建问题
+	problem := &models.ProblemBasic{
+		Identity:   utils.GetUUID(),
+		Title:      title,
+		Content:    content,
+		MaxRuntime: maxRuntime,
+		MaxMem:     maxMem,
+	}
+	//添加分类
+	problemCategories := make([]*models.ProblemCategory, 0)
+	for _, id := range categoryIds {
+		categoryId, _ := strconv.Atoi(id)
+		problemCategories = append(problemCategories, &models.ProblemCategory{
+			ProblemId:  problem.ID,
+			CategoryId: uint(categoryId),
+		})
+	}
+	problem.ProblemCategories = problemCategories
+	fmt.Println(problem.Identity)
+	//	添加测试用例
+	testCaseBasics := make([]*models.TestCase, 0)
+	for _, testCase := range testCases {
+		//{"input":"1 2\n","input":"3\n"}
+		caseMap := make(map[string]string)
+		err := json.Unmarshal([]byte(testCase), &caseMap)
+		if err != nil {
+			response.FailResponseWithMsg("测试用例格式错误", c)
+			return
+		}
+		if _, ok := caseMap["input"]; !ok {
+			response.FailResponseWithMsg("测试用例格式错误", c)
+			return
+		}
+		if _, ok := caseMap["output"]; !ok {
+			response.FailResponseWithMsg("测试用例格式错误", c)
+			return
+		}
+		testCaseBasics = append(testCaseBasics, &models.TestCase{
+			Identity:        utils.GetUUID(),
+			ProblemIdentity: problem.Identity,
+			Input:           caseMap["input"],
+			Output:          caseMap["output"],
+		})
+	}
+	problem.TestCases = testCaseBasics
+	err := utils.DB.Debug().Create(testCaseBasics).Error
+	if err != nil {
+		response.FailResponseWithMsg("服务器错误", c)
+		return
+	}
+	////数据库创建问题
+	//err := utils.DB.Debug().Create(problem).Error
+	//if err != nil {
+	//	response.FailResponseWithMsg("服务器错误", c)
+	//	return
+	//}
+	//	返回数据
+	response.SuccessResponse("添加成功", gin.H{
+		"problem_identity": problem.Identity,
+	}, c)
 }

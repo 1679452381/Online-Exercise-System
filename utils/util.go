@@ -22,16 +22,18 @@ func GetMd5(s string) string {
 type UserClaim struct {
 	Identity string `json:"identity"`
 	Name     string `json:"name"`
+	IsAdmin  int    `json:"is_admin"`
 	jwt.RegisteredClaims
 }
 
 var jwtKey = []byte("zxczxc")
 
 // 生成token
-func GenerateToken(identity, name string) (string, error) {
+func GenerateToken(identity, name string, isAdmin int) (string, error) {
 	uc := &UserClaim{
 		Identity:         identity,
 		Name:             name,
+		IsAdmin:          isAdmin,
 		RegisteredClaims: jwt.RegisteredClaims{},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, uc)

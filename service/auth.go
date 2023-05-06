@@ -32,12 +32,11 @@ func Login(c *gin.Context) {
 	user := new(models.UserBasic)
 	err := utils.DB.Where("username=? AND password = ?", username, utils.GetMd5(password)).First(&user).Error
 	if err != nil {
-		log.Fatalln(err)
 		response.SuccessResponseWithMsg("用户名或密码错误", c)
 		return
 	}
 	//生成token
-	token, err := utils.GenerateToken(user.Identity, username)
+	token, err := utils.GenerateToken(user.Identity, username, user.IsAdmin)
 	if err != nil {
 		response.SuccessResponseWithMsg("系统错误", c)
 		return

@@ -10,7 +10,7 @@ import (
 
 // SubmitList
 // @Tags 公共方法
-// @Summary 提交列表
+// @Summary 用户提交列表
 // @Param page query string false "page"
 // @Param size query string false "size"
 // @Param problem_identity query string false "problem_identity"
