@@ -90,7 +90,7 @@ func ProblemDetail(c *gin.Context) {
 // @Param category_ids formData array false "category_ids"
 // @Param test_cases formData array true "test_cases"
 // @Success 200 {string} json "{"code":"200","msg":"",data:""}"
-// @Router /problem/add [post]
+// @Router /u/admin/problem/add [post]
 func CreateProblem(c *gin.Context) {
 	//获取参数
 	title := c.PostForm("title")

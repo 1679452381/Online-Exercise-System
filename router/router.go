@@ -28,8 +28,13 @@ func Router() *gin.Engine {
 	//用户组
 	auth := r.Group("/u", middleware.AuthCheck())
 	auth.GET("/detail", service.UserDetail)
+
+	admin := auth.Group("/admin", middleware.AuthAdminCheck())
 	//管理员创建问题
-	auth.POST("/problem/add", middleware.AuthAdminCheck(), service.CreateProblem)
+	admin.POST("/problem/add", service.CreateProblem)
+	//管理员获取分类列表
+	admin.GET("/category_list", service.CategoryList)
+
 	auth.POST("/test", service.Hello)
 
 	return r

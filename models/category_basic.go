@@ -1,6 +1,9 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+	"online_exercise_system/utils"
+)
 
 type CategoryBasic struct {
 	gorm.Model
@@ -11,4 +14,12 @@ type CategoryBasic struct {
 
 func (CategoryBasic) TableName() string {
 	return "category_basic"
+}
+
+func GetCategoryList(keyword string) *gorm.DB {
+	tx := utils.DB.Model(&CategoryBasic{})
+	if keyword != "" {
+		tx.Where("name like ?", "%"+keyword+"%")
+	}
+	return tx
 }
