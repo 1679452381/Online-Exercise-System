@@ -34,6 +34,12 @@ func Router() *gin.Engine {
 	admin.POST("/problem/add", service.CreateProblem)
 	//管理员获取分类列表
 	admin.GET("/category_list", service.CategoryList)
+	//管理员添加分类
+	admin.POST("/category_add", service.CategoryAdd)
+	//管理员删除分类
+	admin.DELETE("/category_del", service.CategoryDel)
+	//管理员更新分类
+	admin.PUT("/category_update", service.CategoryUpdate)
 
 	auth.POST("/test", service.Hello)
 
