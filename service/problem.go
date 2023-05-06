@@ -148,17 +148,12 @@ func CreateProblem(c *gin.Context) {
 		})
 	}
 	problem.TestCases = testCaseBasics
-	err := utils.DB.Debug().Create(testCaseBasics).Error
+	//数据库创建问题
+	err := utils.DB.Create(problem).Error
 	if err != nil {
 		response.FailResponseWithMsg("服务器错误", c)
 		return
 	}
-	////数据库创建问题
-	//err := utils.DB.Debug().Create(problem).Error
-	//if err != nil {
-	//	response.FailResponseWithMsg("服务器错误", c)
-	//	return
-	//}
 	//	返回数据
 	response.SuccessResponse("添加成功", gin.H{
 		"problem_identity": problem.Identity,
