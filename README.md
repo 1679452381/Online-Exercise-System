@@ -1,4 +1,4 @@
-# Online-Exercise-System 在线联系系统
+# 简易在线提交系统
 技术栈 Gin Gorm
 
 ## 安装mysql
