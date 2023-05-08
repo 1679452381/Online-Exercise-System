@@ -2,6 +2,7 @@ package service
 
 import (
 	"bytes"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"io"
@@ -172,16 +173,36 @@ func SubmitCode(c *gin.Context) {
 			sb.Status = 3
 		}
 	}
-
-	//保存数据库
-	err = utils.DB.Create(&sb).Error
-	if err != nil {
+	//开启事务
+	if err = utils.DB.Transaction(func(tx *gorm.DB) error {
+		err = tx.Create(&sb).Error
+		if err != nil {
+			return errors.New("SubmitBasic save err" + err.Error())
+		}
+		//待更新项
+		m := make(map[string]interface{})
+		m["submit_num"] = gorm.Expr("submit_num+?", 1)
+		if sb.Status == 1 {
+			m["pass_num"] = gorm.Expr("pass_num+?", 1)
+		}
+		//更新user_basic
+		err = tx.Model(&models.UserBasic{}).Where("identity=?", uc.Identity).Updates(m).Error
+		if err != nil {
+			return err
+		}
+		//更新problem_basic
+		err = tx.Model(&models.ProblemBasic{}).Where("identity=?", problemIdentity).Updates(m).Error
+		if err != nil {
+			return err
+		}
+		return nil
+	}); err != nil {
 		response.FailResponseWithMsg("提交失败", c)
 		return
 	}
+
 	response.SuccessResponseWithData(gin.H{
-		"status":  sb.Status,
-		"msg":     msg,
-		"problem": problem,
+		"status": sb.Status,
+		"msg":    msg,
 	}, c)
 }
