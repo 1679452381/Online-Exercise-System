@@ -33,7 +33,9 @@ func Router() *gin.Engine {
 
 	authAdmin := authUser.Group("/admin", middleware.AuthAdminCheck())
 	//管理员创建问题
-	authAdmin.POST("/problem/add", service.CreateProblem)
+	authAdmin.POST("/problem_add", service.CreateProblem)
+	//管理员修改问题
+	authAdmin.POST("/problem_modify", service.ModifyProblem)
 	//管理员获取分类列表
 	authAdmin.GET("/category_list", service.CategoryList)
 	//管理员添加分类

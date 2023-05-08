@@ -388,7 +388,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/u/admin/problem/add": {
+        "/u/admin/problem_add": {
             "post": {
                 "tags": [
                     "管理员私有方法"
@@ -400,6 +400,77 @@ const docTemplate = `{
                         "description": "authorization",
                         "name": "authorization",
                         "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "title",
+                        "name": "title",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "content",
+                        "name": "content",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "max_runtime",
+                        "name": "max_runtime",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "max_mem",
+                        "name": "max_mem",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "description": "category_ids",
+                        "name": "category_ids",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "description": "test_cases",
+                        "name": "test_cases",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"msg\":\"\",data:\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/u/admin/problem_modify": {
+            "post": {
+                "tags": [
+                    "管理员私有方法"
+                ],
+                "summary": "修改问题",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "identity",
+                        "name": "identity",
+                        "in": "formData",
                         "required": true
                     },
                     {

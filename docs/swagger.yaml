@@ -246,7 +246,7 @@ paths:
       summary: 更新分类
       tags:
       - 管理员私有方法
-  /u/admin/problem/add:
+  /u/admin/problem_add:
     post:
       parameters:
       - description: authorization
@@ -287,6 +287,54 @@ paths:
           schema:
             type: string
       summary: 创建问题
+      tags:
+      - 管理员私有方法
+  /u/admin/problem_modify:
+    post:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: identity
+        in: formData
+        name: identity
+        required: true
+        type: string
+      - description: title
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: content
+        in: formData
+        name: content
+        required: true
+        type: string
+      - description: max_runtime
+        in: formData
+        name: max_runtime
+        type: integer
+      - description: max_mem
+        in: formData
+        name: max_mem
+        type: integer
+      - description: category_ids
+        in: formData
+        name: category_ids
+        type: array
+      - description: test_cases
+        in: formData
+        name: test_cases
+        required: true
+        type: array
+      responses:
+        "200":
+          description: '{"code":"200","msg":"",data:""}'
+          schema:
+            type: string
+      summary: 修改问题
       tags:
       - 管理员私有方法
   /u/admin/submit:
