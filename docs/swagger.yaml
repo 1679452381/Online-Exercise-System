@@ -143,7 +143,7 @@ paths:
       summary: 用户注册
       tags:
       - 公共方法
-  /submit/list:
+  /submit_list:
     get:
       parameters:
       - description: page
@@ -174,6 +174,52 @@ paths:
       summary: 用户提交列表
       tags:
       - 公共方法
+  /u/admin/category_add:
+    post:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: parent_identity
+        in: formData
+        name: parent_identity
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","msg":"",data:""}'
+          schema:
+            type: string
+      summary: 添加分类
+      tags:
+      - 管理员私有方法
+  /u/admin/category_del:
+    delete:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: category_identity
+        in: query
+        name: category_identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","msg":"",data:""}'
+          schema:
+            type: string
+      summary: 删除分类
+      tags:
+      - 管理员私有方法
   /u/admin/category_list:
     get:
       parameters:
@@ -182,24 +228,22 @@ paths:
         name: authorization
         required: true
         type: string
-      - description: page
-        in: query
-        name: page
+      - description: name
+        in: formData
+        name: name
+        required: true
         type: string
-      - description: size
-        in: query
-        name: size
-        type: string
-      - description: keyword
-        in: query
-        name: keyword
+      - description: identity
+        in: formData
+        name: identity
+        required: true
         type: string
       responses:
         "200":
           description: '{"code":"200","msg":"",data:""}'
           schema:
             type: string
-      summary: 获取分类列表
+      summary: 更新分类
       tags:
       - 管理员私有方法
   /u/admin/problem/add:
@@ -245,6 +289,37 @@ paths:
       summary: 创建问题
       tags:
       - 管理员私有方法
+  /u/admin/submit:
+    post:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: problem_identity
+        in: query
+        name: problem_identity
+        required: true
+        type: string
+      - description: code
+        in: body
+        name: code
+        required: true
+        schema:
+          type: string
+      - description: status
+        in: query
+        name: status
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","msg":"",data:""}'
+          schema:
+            type: string
+      summary: 提交代码
+      tags:
+      - 用户方法
   /u/detail:
     get:
       responses:

@@ -231,7 +231,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/submit/list": {
+        "/submit_list": {
             "get": {
                 "tags": [
                     "公共方法"
@@ -279,12 +279,12 @@ const docTemplate = `{
                 }
             }
         },
-        "/u/admin/category_list": {
-            "get": {
+        "/u/admin/category_add": {
+            "post": {
                 "tags": [
                     "管理员私有方法"
                 ],
-                "summary": "获取分类列表",
+                "summary": "添加分类",
                 "parameters": [
                     {
                         "type": "string",
@@ -295,21 +295,87 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "page",
-                        "name": "page",
-                        "in": "query"
+                        "description": "name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
                     },
                     {
                         "type": "string",
-                        "description": "size",
-                        "name": "size",
-                        "in": "query"
+                        "description": "parent_identity",
+                        "name": "parent_identity",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"msg\":\"\",data:\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/u/admin/category_del": {
+            "delete": {
+                "tags": [
+                    "管理员私有方法"
+                ],
+                "summary": "删除分类",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
                     },
                     {
                         "type": "string",
-                        "description": "keyword",
-                        "name": "keyword",
-                        "in": "query"
+                        "description": "category_identity",
+                        "name": "category_identity",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"msg\":\"\",data:\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/u/admin/category_list": {
+            "get": {
+                "tags": [
+                    "管理员私有方法"
+                ],
+                "summary": "更新分类",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "identity",
+                        "name": "identity",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -374,6 +440,53 @@ const docTemplate = `{
                         "name": "test_cases",
                         "in": "formData",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"msg\":\"\",data:\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/u/admin/submit": {
+            "post": {
+                "tags": [
+                    "用户方法"
+                ],
+                "summary": "提交代码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "problem_identity",
+                        "name": "problem_identity",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "code",
+                        "name": "code",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "status",
+                        "name": "status",
+                        "in": "query"
                     }
                 ],
                 "responses": {

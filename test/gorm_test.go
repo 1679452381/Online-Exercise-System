@@ -14,7 +14,7 @@ func TestGorm(t *testing.T) {
 	if err != nil {
 		t.Fatal(err.Error())
 	}
-	data := make([]*models.User, 0)
+	data := make([]*models.UserBasic, 0)
 	err = db.Find(&data).Error
 	if err != nil {
 		t.Fatal(err.Error())

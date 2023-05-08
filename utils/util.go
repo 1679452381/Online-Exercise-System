@@ -9,6 +9,7 @@ import (
 	"github.com/jordan-wright/email"
 	"math/rand"
 	"net/smtp"
+	"os"
 	"regexp"
 	"strconv"
 	"time"
@@ -94,4 +95,25 @@ func SendEmailCode(toEmail, code string) error {
 	//返回EOF 关闭SSL重试
 	return e.SendWithTLS("smtp.163.com:465", smtp.PlainAuth("", "17700611471@163.com", "DSBZHQSKFWQVDSVK", "smtp.163.com"), &tls.Config{InsecureSkipVerify: true, ServerName: "smtp.163.com"})
 
+}
+
+// 保存代码 返回文件路径
+func SaveCode(code []byte) (string, error) {
+	fileName := "code/" + GetUUID()
+	path := fileName + "/main.go"
+	err := os.MkdirAll(fileName, 0777)
+	if err != nil {
+		return "", err
+	}
+	//创建并打开文件
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 777)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+	_, err = f.Write(code)
+	if err != nil {
+		return "", err
+	}
+	return path, nil
 }

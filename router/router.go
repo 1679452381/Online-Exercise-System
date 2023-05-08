@@ -17,7 +17,7 @@ func Router() *gin.Engine {
 	//用户提交排行
 	r.GET("/rank_list", service.GetRankList)
 	//用户提交列表
-	r.GET("/submit/list", service.SubmitList)
+	r.GET("/submit_list", service.SubmitList)
 
 	problem := r.Group("/problem")
 	//问题列表
@@ -26,22 +26,24 @@ func Router() *gin.Engine {
 	problem.GET("/detail", service.ProblemDetail)
 
 	//用户组
-	auth := r.Group("/u", middleware.AuthCheck())
-	auth.GET("/detail", service.UserDetail)
+	authUser := r.Group("/u", middleware.AuthCheck())
+	authUser.GET("/detail", service.UserDetail)
+	//提交问题
+	authUser.POST("/submit", service.SubmitCode)
 
-	admin := auth.Group("/admin", middleware.AuthAdminCheck())
+	authAdmin := authUser.Group("/admin", middleware.AuthAdminCheck())
 	//管理员创建问题
-	admin.POST("/problem/add", service.CreateProblem)
+	authAdmin.POST("/problem/add", service.CreateProblem)
 	//管理员获取分类列表
-	admin.GET("/category_list", service.CategoryList)
+	authAdmin.GET("/category_list", service.CategoryList)
 	//管理员添加分类
-	admin.POST("/category_add", service.CategoryAdd)
+	authAdmin.POST("/category_add", service.CategoryAdd)
 	//管理员删除分类
-	admin.DELETE("/category_del", service.CategoryDel)
+	authAdmin.DELETE("/category_del", service.CategoryDel)
 	//管理员更新分类
-	admin.PUT("/category_update", service.CategoryUpdate)
+	authAdmin.PUT("/category_update", service.CategoryUpdate)
 
-	auth.POST("/test", service.Hello)
+	authUser.POST("/test", service.Hello)
 
 	return r
 }
