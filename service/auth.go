@@ -179,7 +179,7 @@ func GetRankList(c *gin.Context) {
 	//	记录数据条数
 	var count int64
 	tx := models.GetUserBasicRankList()
-	err = tx.Count(&count).Order("completed_problem_num desc ,submit_num asc").Offset(offset).Limit(size).Find(&users).Error
+	err = tx.Count(&count).Order("pass_num desc ,submit_num asc").Offset(offset).Limit(size).Find(&users).Error
 	if err != nil {
 		response.FailResponseWithMsg("服务器错误", c)
 		return
